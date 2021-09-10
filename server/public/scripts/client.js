@@ -10,33 +10,9 @@ $( document ).ready( function(){
 }); // end doc ready
 
 function setupClickListeners() {
-  $( '#addButton' ).on( 'click', function(){
+  $( '#addButton' ).on( 'click', addKoalas ) 
     console.log( 'in addButton on click' );
-    let koalaToSend = {
-      name: $('#nameIn').val(),
-      age: $('#ageIn').val(),
-      gender: $('#genderIn').val(),
-      readyForTransfer: $('#readyForTransferIn').val(),
-      notes: $('#notesIn').val(),
-    };
-    $.ajax({
-      type: 'POST',
-      url: '/koalas',
-      data: koalaToSend,
-    }).then(function(response){
-      $('#nameIn').val(''),
-      $('#ageIn').val(''),
-      $('#genderIn').val(''),
-      $('#readyForTransferIn').val(''),
-      $('#notesIn').val('')
-      // call saveKoala with the new obejct
-      saveKoala( koalaToSend );
-    }).catch(function(error){
-      alert('something went wrong with POST', error );
-      console.log('Error with POST!');
-    });
-    
-  });
+
   $(document).on('click', '.readyToTransferBtn', readyToTransfer) 
 }
 
@@ -65,18 +41,18 @@ function getKoalas(){
   })
   .then(function (response){
     console.log('get response is ');
-    // append to DOM
+  //   // append to DOM
     for (let i = 0; i < response.length; i++) {
       console.log(response[i].ready_for_transfer)
-      let transferButton = response[i].ready_for_transfer ? '' : `<button data-id="${response[i].id}"gi class="readyToTransferBtn">Ready for Transfer</button>`;
+      // let transferButton = response[i].ready_for_transfer ? '' : `<button data-id="${response[i].id}"gi class="readyToTransferBtn">Ready for Transfer</button>`;
       $('#viewKoalas').append(`
-          <tr data-id="${response[i].id}">
+          <tr>
               <td>${response[i].name}</td>
               <td>${response[i].age}</td>
               <td>${response[i].gender}</td>
               <td>${response[i].ready_for_transfer}</td>
               <td>${response[i].notes}</td>
-              // <td><buttonclass="readyBtn">Ready for Transfer</button></td>//
+              // <td><button data-id="${response[i].id}" class="readyToTransferBtn">Ready for Transfer</button></td>
           </tr>
       `);
     }
@@ -84,11 +60,15 @@ function getKoalas(){
   
 } // end getKoalas
 
-function saveKoala( newKoala ){
-  console.log( 'in saveKoala', newKoala );
-  // ajax call to server to get koalas
- 
-}
+// function saveKoala( newKoala ){
+//   console.log( 'in saveKoala', newKoala );
+//   // ajax call to server to get koalas
+//   $.ajax({
+//     type: 'POST',
+//     url: '/koalas',
+//     data: koalaToSend,
+
+// }
 
 function deleteKoala() {
   let koalaId = $(this).val();
@@ -101,3 +81,26 @@ function deleteKoala() {
     }
   });
 }
+function addKoalas(
+
+let koalaToSend = {
+  name: $('#nameIn').val(),
+  age: $('#ageIn').val(),
+  gender: $('#genderIn').val(),
+  readyForTransfer: $('#readyForTransferIn').val(),
+  notes: $('#notesIn').val(),
+
+}.then(function(response){
+  $('#nameIn').val(''),
+  $('#ageIn').val(''),
+  $('#genderIn').val(''),
+  $('#readyForTransferIn').val(''),
+  $('#notesIn').val('')
+  // call saveKoala with the new obejct
+  saveKoala( koalaToSend );
+
+}).catch(function(error){
+  alert('something went wrong with POST', error );
+  console.log('Error with POST!');
+
+)
