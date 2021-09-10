@@ -45,6 +45,7 @@ function readyToTransfer() {
 
 function getKoalas(){
   console.log( 'in getKoalas' );
+  $('#viewKoalas').empty();
   // ajax call to server to get koalas
   $.ajax({
     method: 'GET',
@@ -75,4 +76,16 @@ function saveKoala( newKoala ){
   console.log( 'in saveKoala', newKoala );
   // ajax call to server to get koalas
  
+}
+
+function deleteKoala() {
+  let koalaId = $(this).val();
+  $.ajax({
+    type: 'DELETE',
+    url: '/koalas/' + koalaId,
+    success: function (response) {
+      console.log('response', response);
+      getKoalas();
+    }
+  });
 }
