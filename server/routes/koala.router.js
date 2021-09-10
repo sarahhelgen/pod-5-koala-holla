@@ -42,7 +42,7 @@ koalaRouter.get('/', (req,res) => {
 koalaRouter.put('/:id', (req,res) => {
     const koalaId = req.params.id;
 
-    const queryText = '';
+    const queryText = 'UPDATE "koalas" SET "ready_to_transfer" = NOT "ready_to_transfer" WHEN "id" = $1;';
 
     pool.query(queryText, [koalaId]).then((results) => {
         res.send(200);
