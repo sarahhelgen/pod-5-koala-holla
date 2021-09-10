@@ -1,38 +1,77 @@
+const { Router } = require('express');
 const express = require('express');
+const { Pool } = require('pg');
 const koalaRouter = express.Router();
 
 // DB CONNECTION
+const pg = require('pg');
+
+const pool = new pg.Pool({
+    database: 'koala_holla',
+    host: 'localhost',
+    port: '5432',
+    max: 10,
+    idleTimeoutMillis: 30000,
+});
+
+pool.on('connect', () =>{
+    console.log('PG connected to postgres!');
+});
+
+pool.on('error', (error) =>{
+    console.log('unable to connect to postgres!', error );
+});
 
 
 // GET
+koalaRouter.get('/', (req,res) => {
+    const queryText = 'SELECT * FROM "koalas";';
 
+    pool.query( queryText ).then(( results ) => {
+        res.send( results.row );
+
+    }).catch((error) => {
+        console.log('There was an error for /koals GET', error);
+        res.send(500);
+    });
+});
 
 // POST
 koalaRouter.post('/', (req,res) => {
-    const newKoalaTenent = req.body;
-
+    const koalaId = req.body;
     const queryText = `
-            INSERT INTO "koalas" ("name", "age", "gender", "transferReady", "notes")
-            VALUES ($1, $2, $3, $4, $5)
-        `;
+        INSERT INTO "koalas" ("name", "gender", "age", "ready_to_transfer", "notes") 
+        VALUES ( $1, $2, $3, $4, $5 )
+    `;
 
-    pool.query( queryText ,[
-        newKoalaTenent.name,
-        newKoalaTenent.age,
-        newKoalaTenent.gender,
-        newKoalaTenent.transferReady,
-        newKoalaTenent.notes,
+    pool.querty(queryText, [
+        koalaId.name,
+        koalaId.gender,
+        koalaId.age,
+        koalaId.ready_to_transfer,
+        koalaId.notes,
 
     ]).then((results) => {
         res.send(200);
-
+        
     }).catch((error) => {
         res.send(500);
     });
 });
 
 // PUT
+koalaRouter.put('/:id', (req,res) => {
+    const koalaId = req.params.id;
 
+    const queryText = '';
+
+    pool.query(queryText, [koalaId]).then((results) => {
+        res.send(200);
+        
+    }).catch((error) => {
+        res.send(500);
+    })
+})
 
 // DELETE
 
