@@ -75,7 +75,7 @@ function getKoalas(){
               <td>${response[i].gender}</td>
               <td>${response[i].ready_for_transfer}</td>
               <td>${response[i].notes}</td>
-              <td><button class="readyBtn">Ready for Transfer</button></td>
+              // <td><button data-id="${response[i].id}"" class="readyBtn">Ready for Transfer</button></td>
           </tr>
       `);
     }
