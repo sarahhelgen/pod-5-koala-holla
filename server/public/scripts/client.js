@@ -12,18 +12,30 @@ $( document ).ready( function(){
 function setupClickListeners() {
   $( '#addButton' ).on( 'click', function(){
     console.log( 'in addButton on click' );
-    // get user input and put in an object
-    // NOT WORKING YET :(
-    // using a test object
     let koalaToSend = {
-      name: 'testName',
-      age: 'testName',
-      gender: 'testName',
-      readyForTransfer: 'testName',
-      notes: 'testName',
+      name: $('#nameIn').val(),
+      age: $('#ageIn').val(),
+      gender: $('#genderIn').val(),
+      readyForTransfer: $('#readyForTransferIn').val(),
+      notes: $('#notesIn').val(),
     };
-    // call saveKoala with the new obejct
-    saveKoala( koalaToSend );
+    $.ajax({
+      type: 'POST',
+      url: '/koalas',
+      data: koalaToSend,
+    }).then(function(response){
+      $('#nameIn').val(''),
+      $('#ageIn').val(''),
+      $('#genderIn').val(''),
+      $('#readyForTransferIn').val(''),
+      $('#notesIn').val('')
+      // call saveKoala with the new obejct
+      saveKoala( koalaToSend );
+    }).catch(function(error){
+      alert('something went wrong with POST', error );
+      console.log('Error with POST!');
+    });
+    
   });
   $(document).on('click', '.readyToTransferBtn', readyToTransfer) 
 }
@@ -56,7 +68,7 @@ function getKoalas(){
     // append to DOM
     for (let i = 0; i < response.length; i++) {
       console.log(response[i].ready_for_transfer)
-      let transferButton = response[i].ready_for_transfer ? '' : `<button class="readyToTransferBtn">Ready for Transfer</button>`;
+      let transferButton = response[i].ready_for_transfer ? '' : `<button data-id="${response[i].id}"gi class="readyToTransferBtn">Ready for Transfer</button>`;
       $('#viewKoalas').append(`
           <tr data-id="${response[i].id}">
               <td>${response[i].name}</td>
@@ -64,7 +76,7 @@ function getKoalas(){
               <td>${response[i].gender}</td>
               <td>${response[i].ready_for_transfer}</td>
               <td>${response[i].notes}</td>
-              <td><button class="readyBtn">Ready for Transfer</button></td>
+              // <td><buttonclass="readyBtn">Ready for Transfer</button></td>//
           </tr>
       `);
     }
