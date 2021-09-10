@@ -3,7 +3,8 @@ CREATE TABLE "koalas" (
 	"name" varchar(200) not null,
 	"gender" varchar(10) not null,
 	"age" int,
-	"ready_to_transfer" BOOLEAN
+	"ready_to_transfer" BOOLEAN,
+	"notes" varchar(300)
 	);
 
 INSERT INTO "koalas" ("name", "gender", "age", "ready_to_transfer", "notes") VALUES 
